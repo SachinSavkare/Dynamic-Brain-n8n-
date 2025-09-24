@@ -1,0 +1,602 @@
+{
+  "name": "Dynamic Brain",
+  "nodes": [
+    {
+      "parameters": {
+        "trigger": [
+          "app_mention"
+        ],
+        "channelId": {
+          "__rl": true,
+          "value": "C09D1VB5TQV",
+          "mode": "list",
+          "cachedResultName": "n8n-stuff"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.slackTrigger",
+      "typeVersion": 1,
+      "position": [
+        -320,
+        192
+      ],
+      "id": "aaa67bac-2a5e-4d4c-86ae-3dd74eeeb0e7",
+      "name": "Slack Trigger",
+      "webhookId": "be59ed28-0a94-4f5e-b089-7b864e424488",
+      "credentials": {
+        "slackApi": {
+          "id": "icUWlkVcMolk64zq",
+          "name": "AIS Stuff"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C09D1VB5TQV",
+          "mode": "list",
+          "cachedResultName": "n8n-stuff"
+        },
+        "text": "={{ $('Smart Tools Agent').item.json.output }}",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        800,
+        192
+      ],
+      "id": "bcb06349-a199-4b0b-ab9b-33d20850cb39",
+      "name": "Send a message",
+      "webhookId": "aa2f4b92-dbd2-4b5f-b207-e4b75d8740e6",
+      "credentials": {
+        "slackApi": {
+          "id": "icUWlkVcMolk64zq",
+          "name": "AIS Stuff"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -112,
+        416
+      ],
+      "id": "84434073-265f-4131-9bdb-7538c9982467",
+      "name": "2.5 Flash",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "nhAOL9sKMfyG8Vrt",
+          "name": "Google Gemini(PaLM) API account AIS"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Model Selector Agent\n",
+        "height": 224,
+        "width": 320,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -160,
+        112
+      ],
+      "id": "b0d8bc52-171d-47a8-a3ef-4890c17d08eb",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## Smart Tools Agent\n",
+        "height": 224,
+        "width": 352,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        176,
+        112
+      ],
+      "id": "89b934e3-cfd7-482b-bff2-78f14f4fb6db",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.blocks[0].elements[0].elements[1].text }}",
+        "options": {
+          "systemMessage": "=# Overview\nYou are an AI agent responsible for selecting the most suitable large language model to handle a given user request. Choose only one model from the list below based strictly on each model’s strengths.  \n\n## Instructions\nAnalyze the user’s request and return the exact model name that best fits the task. Your response must contain only the model name. No explanations, no formatting, no extra text.\n\n## Available Models and Strengths\n- `google/gemini-2.0-flash-001`: best for fast, lightweight, conversational tasks or simple general-purpose queries  \n- `openai/gpt-4.1-mini`: best for tool calling creating calendar events or getting contact information\n- `anthropic/claude-3.7-sonnet`: best for writing high-quality content, research summaries, or tasks requiring clear, professional language  \n- `openai/o1`: best for deep logical reasoning and coding in a conversational way  \n\n### Output Format:\nReturn only one of the following strings:\n- google/gemini-2.0-flash-001  \n- openai/gpt-4.1-mini  \n- anthropic/claude-3.7-sonnet  \n- openai/o1"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -112,
+        192
+      ],
+      "id": "2b3e1b1a-42e8-476d-b5d4-78c87320e59f",
+      "name": "Model Selector"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Slack Trigger').item.json.blocks[0].elements[0].elements[1].text }}",
+        "options": {
+          "systemMessage": "=Here is the current date/time: {{ $now }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        240,
+        192
+      ],
+      "id": "0fdd16b2-a68b-4fac-afd8-8ab5e8222c7b",
+      "name": "Smart Tools Agent"
+    },
+    {
+      "parameters": {
+        "content": "## Flash 2.0\n",
+        "height": 192,
+        "width": 176,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -160,
+        352
+      ],
+      "id": "b8b73e5e-cfa1-4561-91f6-a64336fed844",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "## Dynamic Brain\n",
+        "height": 208,
+        "width": 192,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        176,
+        352
+      ],
+      "id": "aaf7bfca-ff68-40c0-bb95-c45dada9bbed",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "model": "={{ $('Model Selector').item.json.output.trimEnd() }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        240,
+        432
+      ],
+      "id": "b3ae6a5e-fd4c-421d-b0f5-5ece3c5de716",
+      "name": "Dynamic Brain",
+      "credentials": {
+        "openRouterApi": {
+          "id": "czIsN4rd8sIKdRuL",
+          "name": "OpenRouter AIS"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Tools\n",
+        "height": 208,
+        "width": 576,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        384,
+        352
+      ],
+      "id": "ffc8ba12-9f62-4eaa-a643-3e246767e3cd",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "sachinsavkare08@gmail.com",
+          "mode": "list",
+          "cachedResultName": "sachinsavkare08@gmail.com"
+        },
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        432,
+        416
+      ],
+      "id": "b6a39aa2-d89a-47e0-aa20-2f7c417a8994",
+      "name": "Create Event",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "6ppAccMnijHjiaLv",
+          "name": "Google Calendar account AIS"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "draft",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        560,
+        416
+      ],
+      "id": "bbc66842-3b1a-4810-968b-654cf6ca4f1d",
+      "name": "Create Draft",
+      "webhookId": "c4f96501-ff0b-46bc-954f-d598d4afbf3e",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "eCK4EFn7FCxilJEq",
+          "name": "Gmail AIS"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1l7ICTf6XNqk5LBx3MyOqyoedgcX3rzgCYJQb0kMlnQo",
+          "mode": "list",
+          "cachedResultName": "Dynamic Model Log",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1l7ICTf6XNqk5LBx3MyOqyoedgcX3rzgCYJQb0kMlnQo/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1l7ICTf6XNqk5LBx3MyOqyoedgcX3rzgCYJQb0kMlnQo/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ $now.format('yyyy-MM-dd hh:mm a') }}",
+            "Model": "={{ $('Model Selector').item.json.output.trimEnd() }}",
+            "Ouput": "={{ $json.output.trimEnd() }}",
+            "Input": "={{ $('Slack Trigger').item.json.blocks[0].elements[0].elements[1].text }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Input",
+              "displayName": "Input",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Ouput",
+              "displayName": "Ouput",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Model",
+              "displayName": "Model",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        592,
+        192
+      ],
+      "id": "61c41ab4-1715-49d6-a0a3-8fae79cc6d72",
+      "name": "Log Output",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "r5dJyl6N7Nvh7Os3",
+          "name": "Google Sheets AIS"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Log Run\n",
+        "height": 224,
+        "width": 192,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        544,
+        112
+      ],
+      "id": "8a3c8db8-4cee-4c4d-a582-f4f6ed82d3ea",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "content": "## Slack Response\n",
+        "height": 224,
+        "width": 208
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        752,
+        112
+      ],
+      "id": "da8fc9fd-d2af-43ef-bc54-f5da6d6cb3e6",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "content": "## Slack Trigger\n",
+        "height": 224,
+        "width": 192
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -368,
+        112
+      ],
+      "id": "af2792e5-8f36-4266-9ff1-a1dcab0269ec",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Input Query\n\n1. Hey, tell me a joke\n2. Create a calendar event at 1pm today for Lunch\n3. Do some research on AI Voice Agenrs and create a Blog Post",
+        "height": 176,
+        "width": 432,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -592,
+        -96
+      ],
+      "id": "c57e28b1-1324-433d-8b6a-d194d46be190",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Use this tool to search the web. ",
+        "method": "POST",
+        "url": "https://api.tavily.com/search",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"query\": \"{searchTerm}\",\n  \"topic\": \"general\",\n  \"search_depth\": \"advanced\",\n  \"chunks_per_source\": 3,\n  \"max_results\": 1,\n  \"time_range\": null,\n  \"days\": 7,\n  \"include_answer\": true,\n  \"include_raw_content\": false,\n  \"include_images\": false,\n  \"include_image_descriptions\": false,\n  \"include_domains\": [],\n  \"exclude_domains\": []\n}",
+        "placeholderDefinitions": {
+          "values": [
+            {
+              "name": "searchTerm",
+              "description": "What the user is searching for. "
+            }
+          ]
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "typeVersion": 1.1,
+      "position": [
+        832,
+        416
+      ],
+      "id": "93807066-a450-49b7-b190-ac88690ca5ad",
+      "name": "Tavily",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "GDg1hzKpkf1SuQ5d",
+          "name": "Tavily Credentials AIS"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1O0AlvWQsTusdhR4Xm0mK3prevo1Xkz7Z48GLW2u7VBc",
+          "mode": "list",
+          "cachedResultName": "Contacts",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O0AlvWQsTusdhR4Xm0mK3prevo1Xkz7Z48GLW2u7VBc/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O0AlvWQsTusdhR4Xm0mK3prevo1Xkz7Z48GLW2u7VBc/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        688,
+        416
+      ],
+      "id": "88dcfcee-d292-43b5-ad98-2f4dfbc692fe",
+      "name": "Contacts",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "r5dJyl6N7Nvh7Os3",
+          "name": "Google Sheets AIS"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Slack Trigger": {
+      "main": [
+        [
+          {
+            "node": "Model Selector",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "2.5 Flash": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Model Selector",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Model Selector": {
+      "main": [
+        [
+          {
+            "node": "Smart Tools Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Smart Tools Agent": {
+      "main": [
+        [
+          {
+            "node": "Log Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dynamic Brain": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Smart Tools Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Event": {
+      "ai_tool": [
+        [
+          {
+            "node": "Smart Tools Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Draft": {
+      "ai_tool": [
+        [
+          {
+            "node": "Smart Tools Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Output": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tavily": {
+      "ai_tool": [
+        [
+          {
+            "node": "Smart Tools Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contacts": {
+      "ai_tool": [
+        [
+          {
+            "node": "Smart Tools Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "ab29367c-8900-4479-ac71-69b455786381",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "91f42292365f2736b62ea45ddfd531a5d9a185f2bc4a363bfb1ae1188ac76851"
+  },
+  "id": "AD2vCNDVA0pR6uDq",
+  "tags": []
+}
